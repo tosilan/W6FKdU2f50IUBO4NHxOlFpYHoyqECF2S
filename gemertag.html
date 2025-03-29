@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MCEasyLink - 利用可能なゲーマータグ一覧。マインクラフト統合版でゲーム機から簡単に外部サーバーに接続できるサービス。">
+    <meta name="keywords" content="マインクラフト,マイクラ,Minecraft,統合版,サーバー接続,Switch,Xbox,PS4,外部サーバー,ゲーマータグ">
+    <title>利用可能なゲーマータグ - MCEasyLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e1f5fe;
+            --secondary-color: #03a9f4;
+            --dark-color: #0288d1;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 8px rgba(0, 0, 0, 0.15);
+            --rounded: 12px;
+            --footer-bg: #2c3e50;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding-top: 0;
+        }
+
+        /* ヘッダーとナビゲーション */
+        header {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        /* デスクトップナビゲーション */
+        .desktop-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* モバイルナビゲーション */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 101;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 5rem 1.5rem 1.5rem;
+            z-index: 99;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open {
+            right: 0;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            display: block;
+        }
+
+        /* メインコンテンツ */
+        .page-title {
+            text-align: center;
+            margin: 3rem 0;
+            color: var(--dark-color);
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--secondary-color);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--secondary-color);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .status-card {
+            background-color: var(--primary-color);
+            padding: 1.5rem;
+            border-radius: var(--rounded);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .status-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .status {
+            font-weight: bold;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .status-available {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-almost-full {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .status-unavailable {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .note {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffcc00;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--rounded) var(--rounded) 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--rounded);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* フッター */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 992px) {
+            .desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 0;
+            }
+
+            header {
+                top: 0;
+                padding: 0.5rem 0;
+                z-index: 100;
+            }
+
+            .mobile-nav {
+                top: 0;
+                height: 100vh;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+                margin: 2rem 0;
+            }
+
+            .status-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .footer-links {
+                gap: 1rem;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="desktop-nav">
+                <a href="index.html" class="nav-link">ホーム</a>
+                <a href="friends.html" class="nav-link">参加方法</a>
+                <a href="gemertag.html" class="nav-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="nav-link">寄付特典</a>
+                <a href="https://discord.gg/your-invite-link" class="nav-link" target="_blank">Discordサーバー</a>
+            </nav>
+
+            <!-- モバイルメニューボタン -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- モバイルナビゲーション -->
+            <nav class="mobile-nav" id="mobileNav">
+                <div class="mobile-nav-links">
+                    <a href="index.html" class="mobile-nav-link">ホーム</a>
+                    <a href="friends.html" class="mobile-nav-link">参加方法</a>
+                    <a href="gemertag.html" class="mobile-nav-link">利用可能なゲーマータグ</a>
+                    <a href="kifu.html" class="mobile-nav-link">寄付特典</a>
+                    <a href="https://discord.gg/your-invite-link" class="mobile-nav-link" target="_blank">Discordサーバー</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">利用可能なゲーマータグ</h1>
+
+        <section class="section" id="available-tags">
+            <h2 class="section-title">
+                <i class="fas fa-tags"></i>
+                現在利用可能なゲーマータグ
+            </h2>
+
+            <p>Microsoftの仕組み上、Xboxのゲーマータグで追加可能な最大人数は2000人までとなっています。ですから、利用不可に伴い新しいサーバーを追加しています。効率よく利用して欲しいので、一覧にあるゲーマータグの複数登録はなるべく控えてください。この追加も運営も全てMCEasyLinkがしていますので、ぜひ上のボタンから支援をお願い致します。</p>
+
+            <div class="note">
+                <strong>ステータスの説明</strong>
+                <p><span class="status status-available">✅ 利用可能</span> | <span class="status status-almost-full">🟠 ほぼ満員</span> | <span class="status status-unavailable">❌ 利用不可</span></p>
+                <p>※複数のゲーマータグを追加することは控えてください。今後ご利用が制限される可能性があります。</p>
+            </div>
+
+            <div class="status-grid">
+                <div class="status-card">
+                    <h3>svcn1</h3>
+                    <p class="status status-unavailable">❌ 利用不可</p>
+                </div>
+                <div class="status-card">
+                    <h3>svcn2</h3>
+                    <p class="status status-unavailable">❌ 利用不可</p>
+                </div>
+                <div class="status-card">
+                    <h3>svcn3</h3>
+                    <p class="status status-available">✅ 利用可能</p>
+                </div>
+                <div class="status-card">
+                    <h3>svcn4</h3>
+                    <p class="status status-available">✅ 利用可能</p>
+                </div>
+                <div class="status-card">
+                    <h3>svcn5</h3>
+                    <p class="status status-available">✅ 利用可能</p>
+                </div>
+                <div class="status-card">
+                    <h3>svcn6</h3>
+                    <p class="status status-available">✅ 利用可能</p>
+                </div>
+            </div>
+
+            <div class="note">
+                <p>新しいゲーマータグが追加された場合や、ステータスが変更された場合はDiscordサーバーでお知らせします。</p>
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="btn" target="_blank">
+                    <i class="fab fa-discord"></i>
+                    Discordサーバーに参加
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo" style="color: white; font-size: 1.5rem;">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </div>
+
+            <div class="social-icons">
+                <a href="https://www.youtube.com/@code.tec." target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            </div>
+
+
+            <!-- フッターリンク -->
+            <div class="footer-links">
+                <a href="index.html" class="footer-link">ホーム</a>
+                <a href="terms.html" class="footer-link">利用規約</a>
+                <a href="privacypolicy.html" class="footer-link">プライバシーポリシー</a>
+                <a href="friends.html" class="footer-link">参加方法</a>
+                <a href="gemertag.html" class="footer-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="footer-link">寄付特典</a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="footer-link" target="_blank">Discordサーバー</a>
+            </div>
+
+            <p>&copy; <span id="currentYear"></span> MCEasyLink. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 現在の年を自動更新
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // モバイルメニューの開閉
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileNav.classList.toggle('open');
+            const icon = this.querySelector('i');
+            if (mobileNav.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // メニュー外をクリックで閉じる
+        document.addEventListener('click', function(event) {
+            if (!mobileNav.contains(event.target) && event.target !== mobileMenuBtn) {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // モバイルメニューのリンクをクリックしたらメニューを閉じる
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+</html>

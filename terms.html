@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MCEasyLink - 利用規約。マインクラフト統合版でゲーム機から簡単に外部サーバーに接続できるサービス。">
+    <meta name="keywords" content="マインクラフト,マイクラ,Minecraft,統合版,サーバー接続,Switch,Xbox,PS4,外部サーバー,利用規約">
+    <title>利用規約 - MCEasyLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e1f5fe;
+            --secondary-color: #03a9f4;
+            --dark-color: #0288d1;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 8px rgba(0, 0, 0, 0.15);
+            --rounded: 12px;
+            --footer-bg: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding-top: 0;
+        }
+
+        /* ヘッダーとナビゲーション */
+        header {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        /* デスクトップナビゲーション */
+        .desktop-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* モバイルナビゲーション */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 101;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 5rem 1.5rem 1.5rem;
+            z-index: 99;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open {
+            right: 0;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            display: block;
+        }
+
+        /* メインコンテンツ */
+        .page-title {
+            text-align: center;
+            margin: 3rem 0;
+            color: var(--dark-color);
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--secondary-color);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--secondary-color);
+        }
+
+        .terms-content {
+            line-height: 1.8;
+        }
+
+        .article {
+            margin-bottom: 2.5rem;
+        }
+
+        .article-title {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .article-content {
+            padding-left: 1rem;
+        }
+
+        .article-list {
+            list-style-type: none;
+            padding-left: 1.5rem;
+        }
+
+        .article-list li {
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+
+        .article-list li::before {
+            content: "・";
+            position: absolute;
+            left: -1rem;
+        }
+
+        .note {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffcc00;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--rounded) var(--rounded) 0;
+        }
+
+        /* フッター */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 992px) {
+            .desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 0;
+            }
+
+            header {
+                top: 0;
+                padding: 0.5rem 0;
+                z-index: 100;
+            }
+
+            .mobile-nav {
+                top: 0;
+                height: 100vh;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+                margin: 2rem 0;
+            }
+
+            .article-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+    <nav class="desktop-nav">
+                <a href="index.html" class="nav-link">ホーム</a>
+                <a href="friends.html" class="nav-link">参加方法</a>
+                <a href="gemertag.html" class="nav-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="nav-link">寄付特典</a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="nav-link" target="_blank">Discordサーバー</a>
+            </nav>
+
+            <!-- モバイルメニューボタン -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- モバイルナビゲーション -->
+            <nav class="mobile-nav" id="mobileNav">
+                <div class="mobile-nav-links">
+                    <a href="index.html" class="mobile-nav-link">ホーム</a>
+                    <a href="friends.html" class="mobile-nav-link">参加方法</a>
+                    <a href="gemertag.html" class="mobile-nav-link">利用可能なゲーマータグ</a>
+                    <a href="kifu.html" class="mobile-nav-link">寄付特典</a>
+                    <a href="https://discord.com/invite/SQgnDhEbgc" class="mobile-nav-link" target="_blank">Discordサーバー</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">利用規約</h1>
+
+        <section class="section">
+            <div class="terms-content">
+                <div class="article">
+                    <h2 class="article-title">第1条（適用）</h2>
+                    <div class="article-content">
+                        <p>本規約は、MCEasyLink（以下「本サービス」といいます）を利用するすべてのユーザー（以下「ユーザー」といいます）に適用されます。</p>
+                        <p>ユーザーは、本サービスを利用することにより、本規約に同意したものとみなされます。</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2 class="article-title">第2条（サービス内容）</h2>
+                    <div class="article-content">
+                        <p>本サービスは、ゲーム機を対象とした外部サーバー接続サービスです。</p>
+                        <p>ユーザーは、フレンドシステムを通じてフレンドを申請し、システム側で自動承認された場合に外部サーバーへ接続できるものとします。</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2 class="article-title">第3条（禁止事項）</h2>
+                    <div class="article-content">
+                        <p>ユーザーは、以下の行為を行ってはなりません。</p>
+                        <ul class="article-list">
+                            <li>法令または公序良俗に反する行為</li>
+                            <li>他のユーザーまたは第三者の権利を侵害する行為</li>
+                            <li>本サービスの運営を妨害する行為</li>
+                            <li>不正な手段で本サービスを利用する行為</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2 class="article-title">第4条（サービスの変更・中止）</h2>
+                    <div class="article-content">
+                        <p>当方は、ユーザーに事前に通知することなく、本サービスの内容を変更または中止することがあります。</p>
+                        <p>本サービスの変更または中止により、ユーザーに生じた損害について、当方は一切の責任を負いません。</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2 class="article-title">第5条（免責事項）</h2>
+                    <div class="article-content">
+                        <p>当方は、本サービスの利用に関して、いかなる保証も行いません。</p>
+                        <p>本サービスの利用により生じた損害について、当方は一切の責任を負いません。</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2 class="article-title">第6条（規約の変更）</h2>
+                    <div class="article-content">
+                        <p>当方は、本規約を随時変更することができるものとします。</p>
+                        <p>変更後の規約は、本サービス上に掲示した時点で効力を生じるものとします。</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2 class="article-title">第7条（準拠法・裁判管轄）</h2>
+                    <div class="article-content">
+                        <p>本規約は、日本法に準拠し、本サービスに関する紛争は、当方の本社所在地を管轄する裁判所を専属的な管轄裁判所とします。</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2 class="article-title">お問い合わせ</h2>
+                    <div class="article-content">
+                        <p>個人情報の取り扱いに関するお問い合わせは、以下のDiscordサーバーまでお願いいたします。</p>
+                        <a href="https://discord.com/invite/SQgnDhEbgc" class="btn" target="_blank">
+                            <i class="fab fa-discord"></i>
+                            Discordサポートサーバー
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <p>本規約は2024年10月1日から施行されます。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo" style="color: white; font-size: 1.5rem;">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </div>
+
+            <div class="social-icons">
+                <a href="https://www.youtube.com/@code.tec." target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            </div>
+
+            <!-- フッターリンク -->
+            <div class="footer-links">
+                <a href="index.html" class="footer-link">ホーム</a>
+                <a href="terms.html" class="footer-link">利用規約</a>
+                <a href="privacypolicy.html" class="footer-link">プライバシーポリシー</a>
+                <a href="friends.html" class="footer-link">参加方法</a>
+                <a href="gemertag.html" class="footer-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="footer-link">寄付特典</a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="footer-link" target="_blank">Discordサーバー</a>
+            </div>
+
+            <p>&copy; <span id="currentYear"></span> MCEasyLink. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 現在の年を自動更新
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // モバイルメニューの開閉
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileNav.classList.toggle('open');
+            const icon = this.querySelector('i');
+            if (mobileNav.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // メニュー外をクリックで閉じる
+        document.addEventListener('click', function(event) {
+            if (!mobileNav.contains(event.target) && event.target !== mobileMenuBtn) {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // モバイルメニューのリンクをクリックしたらメニューを閉じる
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+</html>

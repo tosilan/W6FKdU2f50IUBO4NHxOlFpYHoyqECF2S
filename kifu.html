@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MCEasyLink - 寄付特典。マインクラフト統合版でゲーム機から簡単に外部サーバーに接続できるサービス。">
+    <meta name="keywords" content="マインクラフト,マイクラ,Minecraft,統合版,サーバー接続,Switch,Xbox,PS4,外部サーバー,寄付特典">
+    <title>寄付特典 - MCEasyLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e1f5fe;
+            --secondary-color: #03a9f4;
+            --dark-color: #0288d1;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 8px rgba(0, 0, 0, 0.15);
+            --rounded: 12px;
+            --footer-bg: #2c3e50;
+            --success-color: #4caf50;
+            --premium-color: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding-top: 0;
+        }
+
+        /* ヘッダーとナビゲーション */
+        header {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        /* デスクトップナビゲーション */
+        .desktop-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* モバイルナビゲーション */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 101;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 5rem 1.5rem 1.5rem;
+            z-index: 99;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open {
+            right: 0;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            display: block;
+        }
+
+        /* メインコンテンツ */
+        .page-title {
+            text-align: center;
+            margin: 3rem 0;
+            color: var(--dark-color);
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--secondary-color);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--secondary-color);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .benefit-card {
+            background-color: white;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .benefit-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .benefit-premium .benefit-header {
+            background-color: var(--premium-color);
+            color: #333;
+        }
+
+        .benefit-body {
+            padding: 1.5rem;
+        }
+
+        .benefit-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .benefit-features {
+            list-style-type: none;
+        }
+
+        .benefit-features li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
+        .benefit-features li::before {
+            content: "✓";
+            color: var(--success-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .coming-soon {
+            background-color: #f5f5f5;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: var(--rounded);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--rounded);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-premium {
+            background-color: var(--premium-color);
+            color: #333;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-premium:hover {
+            background-color: #ffab00;
+        }
+
+        .note {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffcc00;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--rounded) var(--rounded) 0;
+        }
+
+        /* フッター */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 992px) {
+            .desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 0;
+            }
+
+            header {
+                top: 0;
+                padding: 0.5rem 0;
+                z-index: 100;
+            }
+
+            .mobile-nav {
+                top: 0;
+                height: 100vh;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+                margin: 2rem 0;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="desktop-nav">
+                <a href="index.html" class="nav-link">ホーム</a>
+                <a href="friends.html" class="nav-link">参加方法</a>
+                <a href="gemertag.html" class="nav-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="nav-link">寄付特典</a>
+                <a href="https://discord.gg/your-invite-link" class="nav-link" target="_blank">Discordサーバー</a>
+            </nav>
+
+            <!-- モバイルメニューボタン -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- モバイルナビゲーション -->
+            <nav class="mobile-nav" id="mobileNav">
+                <div class="mobile-nav-links">
+                    <a href="index.html" class="mobile-nav-link">ホーム</a>
+                    <a href="friends.html" class="mobile-nav-link">参加方法</a>
+                    <a href="gemertag.html" class="mobile-nav-link">利用可能なゲーマータグ</a>
+                    <a href="kifu.html" class="mobile-nav-link">寄付特典</a>
+                    <a href="https://discord.gg/your-invite-link" class="mobile-nav-link" target="_blank">Discordサーバー</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">寄付特典</h1>
+
+        <section class="section" id="donation-benefits">
+            <h2 class="section-title">
+                <i class="fas fa-gift"></i>
+                寄付特典のご案内
+            </h2>
+
+            <p>MCEasyLinkの運営をサポートしていただいた方への特典をご用意しています。Discordサーバーでのブーストまたは寄付ページでの寄付により、以下の特典をご利用いただけます。</p>
+
+            <div class="note">
+                <strong>※注意事項</strong>
+                <p>・お一人様1サーバーまでのご提供となります</p>
+                <p>・特典サーバーはいつでも開始できるように準備中です（近日公開）</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-header">
+                        <h3>Discordブースト1回</h3>
+                    </div>
+                    <div class="benefit-body">
+                        <div class="benefit-price">無料</div>
+                        <ul class="benefit-features">
+                            <li>旧中継サーバーへ直通のフレンドサーバーを提供</li>
+                            <li>24時間サポート</li>
+                        </ul>
+                        <div class="coming-soon">近日公開</div>
+                        <a href="https://discord.com/invite/SQgnDhEbgc" class="btn" target="_blank">
+                            <i class="fab fa-discord"></i>
+                            Discordでブーストする
+                        </a>
+                    </div>
+                </div>
+
+                <div class="benefit-card benefit-premium">
+                    <div class="benefit-header">
+                        <h3>Discordブースト2回</h3>
+                    </div>
+                    <div class="benefit-body">
+                        <div class="benefit-price">無料</div>
+                        <ul class="benefit-features">
+                            <li>あなた専用のフレンドサーバーを提供</li>
+                            <li>旧中継サーバーへ直通</li>
+                            <li>優先サポート</li>
+                            <li>24時間サポート</li>
+                        </ul>
+                        <div class="coming-soon">近日公開</div>
+                        <a href="https://discord.com/invite/SQgnDhEbgc" class="btn btn-premium" target="_blank">
+                            <i class="fab fa-discord"></i>
+                            Discordでブーストする
+                        </a>
+                    </div>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-header">
+                        <h3>500円以上寄付</h3>
+                    </div>
+                    <div class="benefit-body">
+                        <div class="benefit-price">500円～</div>
+                        <ul class="benefit-features">
+                            <li>旧中継サーバーへ直通のフレンドサーバーを提供</li>
+                            <li>24時間サポート</li>
+                        </ul>
+                        <div class="coming-soon">近日公開</div>
+                        <a href="https://forms.gle/Gwo8hTU5Zmg7xnVB9" class="btn" target="_blank">
+                            <i class="fas fa-donate"></i>
+                            寄付ページへ
+                        </a>
+                    </div>
+                </div>
+
+                <div class="benefit-card benefit-premium">
+                    <div class="benefit-header">
+                        <h3>1000円以上寄付</h3>
+                    </div>
+                    <div class="benefit-body">
+                        <div class="benefit-price">1000円～</div>
+                        <ul class="benefit-features">
+                            <li>あなた専用のフレンドサーバーを提供</li>
+                            <li>旧中継サーバーへ直通</li>
+                            <li>優先サポート</li>
+                            <li>24時間サポート</li>
+                        </ul>
+                        <div class="coming-soon">近日公開</div>
+                        <a href="https://forms.gle/Gwo8hTU5Zmg7xnVB9" class="btn btn-premium" target="_blank">
+                            <i class="fas fa-donate"></i>
+                            寄付ページへ
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo" style="color: white; font-size: 1.5rem;">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </div>
+
+            <div class="social-icons">
+                <a href="https://www.youtube.com/@code.tec." target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            </div>
+
+            <!-- フッターリンク -->
+            <div class="footer-links">
+                <a href="index.html" class="footer-link">ホーム</a>
+                <a href="terms.html" class="footer-link">利用規約</a>
+                <a href="privacypolicy.html" class="footer-link">プライバシーポリシー</a>
+                <a href="friends.html" class="footer-link">参加方法</a>
+                <a href="gemertag.html" class="footer-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="footer-link">寄付特典</a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="footer-link" target="_blank">Discordサーバー</a>
+            </div>
+
+            <p>&copy; <span id="currentYear"></span> MCEasyLink. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 現在の年を自動更新
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // モバイルメニューの開閉
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileNav.classList.toggle('open');
+            const icon = this.querySelector('i');
+            if (mobileNav.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // メニュー外をクリックで閉じる
+        document.addEventListener('click', function(event) {
+            if (!mobileNav.contains(event.target) && event.target !== mobileMenuBtn) {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // モバイルメニューのリンクをクリックしたらメニューを閉じる
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MCEasyLink - マインクラフト統合版でゲーム機から簡単に外部サーバーに接続できるサービス。DNS設定不要、簡単接続、24時間サポート。">
+    <meta name="keywords" content="マインクラフト,マイクラ,Minecraft,統合版,サーバー接続,Switch,Xbox,PS4,外部サーバー,DNS設定不要">
+    <title>MCEasyLink - マインクラフト統合版で簡単サーバー接続</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e1f5fe;
+            --secondary-color: #03a9f4;
+            --dark-color: #0288d1;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 8px rgba(0, 0, 0, 0.15);
+            --rounded: 12px;
+            --announcement-bg: #ff5722;
+            --footer-bg: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding-top: 50px;
+        }
+        
+        /* お知らせバー - 修正済み */
+        .announcement-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--announcement-bg);
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+            z-index: 98;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .announcement-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 0 15px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        
+        .announcement-text {
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+        
+        .announcement-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid white;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .announcement-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .announcement-btn i {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .announcement-btn:hover i {
+            transform: translateX(3px);
+        }
+        
+        /* ヘッダーとナビゲーション */
+        header {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 50px;
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        /* デスクトップナビゲーション */
+        .desktop-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* モバイルナビゲーション */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 101;
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 5rem 1.5rem 1.5rem;
+            z-index: 99;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .mobile-nav.open {
+            right: 0;
+        }
+        
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .mobile-nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            display: block;
+        }
+        
+        .mobile-nav-link:hover {
+            background-color: var(--primary-color);
+        }
+        
+        /* メインコンテンツ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--rounded);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        
+        .btn:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), #b3e5fc);
+            padding: 5rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://cdn.pixabay.com/photo/2017/08/10/03/47/graphic-2617860_1280.jpg');
+            background-size: cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            color: #333;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark-color);
+            font-size: 2rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(to right, var(--secondary-color), transparent);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+        
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .benefit-card {
+            background-color: white;
+            padding: 2.5rem 2rem;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            text-align: center;
+            border-top: 4px solid var(--secondary-color);
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .benefit-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .faq {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background-color: white;
+            margin-bottom: 1rem;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background-color: #c8e9f7;
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-answer.show {
+            padding: 1.5rem;
+            max-height: 1000px;
+        }
+        
+        .faq-answer p {
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .video-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            background-color: white;
+            padding: 2.5rem 2rem;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .video-container h2 {
+            margin-bottom: 2rem;
+        }
+
+        .video-placeholder {
+            background-color: #eee;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-radius: var(--rounded);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, var(--primary-color), #b3e5fc);
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            font-size: 1.8rem;
+        }
+        
+        /* フッター */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--secondary-color);
+        }
+        
+        /* SNSシェアセクション */
+        .share-section {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: var(--rounded);
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+        
+        .share-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            position: relative;
+            text-align: left;
+            font-family: monospace;
+            overflow-x: auto;
+            padding-right: 80px;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .copy-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .tooltip {
+            position: absolute;
+            top: -30px;
+            right: 0;
+            background-color: #555;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip.show {
+            opacity: 1;
+        }
+        
+        /* フッターリンク */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .footer-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        .footer-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        
+        /* レスポンシブデザイン */
+        @media (max-width: 992px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding-top: 50px;
+            }
+            
+            .announcement-bar {
+                font-size: 0.9rem;
+                padding: 8px 0;
+                z-index: 98;
+            }
+            
+            header {
+                top: 50px;
+                padding: 0.5rem 0;
+                z-index: 100;
+            }
+            
+            .mobile-nav {
+                top: 50px;
+                height: calc(100vh - 50px);
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .video-placeholder {
+                height: 250px;
+            }
+            
+            .share-box {
+                padding-right: 1rem;
+            }
+            
+            .copy-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .footer-links {
+                gap: 1rem;
+                flex-direction: column;
+            }
+
+            .faq-item {
+                background-color: white;
+                margin-bottom: 1rem;
+                border-radius: var(--rounded);
+                box-shadow: var(--shadow);
+                overflow: hidden;
+                border: 2px solid #fff; /* 追加: 白色の枠線 */
+            }
+
+            .faq-question {
+                padding: 1.5rem;
+                background-color: var(--primary-color);
+                color: var(--dark-color);
+                font-weight: 500;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                transition: background-color 0.3s ease;
+                border-bottom: 2px solid #fff; /* 追加: 質問部分の下線 */
+            }
+
+            .faq-answer {
+                padding: 0 1.5rem;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease, padding 0.3s ease;
+                background-color: #f8f9fa; /* 追加: 回答部分の背景色 */
+                border-radius: 0 0 var(--rounded) var(--rounded); /* 追加: 角丸調整 */
+            }
+
+            .faq-answer.show {
+                padding: 1.5rem;
+                max-height: 1000px;
+                border: 2px solid #fff; /* 追加: 回答表示時の枠線 */
+                border-top: none; /* 追加: 上部の二重線を防止 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- お知らせバー - 修正済み -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span class="announcement-text">🎉 サイトをリニューアル！</span>
+            <a href="#" class="announcement-btn">
+                詳細を見る
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- ヘッダー -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </a>
+            
+            <!-- デスクトップナビゲーション -->
+            <nav class="desktop-nav">
+                <a href="index.html" class="nav-link">ホーム</a>
+                <a href="friends.html" class="nav-link">参加方法</a>
+                <a href="gemertag.html" class="nav-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="nav-link">寄付特典</a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="nav-link" target="_blank">Discordサーバー</a>
+            </nav>
+            
+            <!-- モバイルメニューボタン -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- モバイルナビゲーション -->
+            <nav class="mobile-nav" id="mobileNav">
+                <div class="mobile-nav-links">
+                    <a href="index.html" class="mobile-nav-link">ホーム</a>
+                    <a href="friends.html" class="mobile-nav-link">参加方法</a>
+                    <a href="gemertag.html" class="mobile-nav-link">利用可能なゲーマータグ</a>
+                    <a href="kifu.html" class="mobile-nav-link">寄付特典</a>
+                    <a href="https://discord.com/invite/SQgnDhEbgc" class="mobile-nav-link" target="_blank">Discordサーバー</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>マインクラフト統合版で簡単にサーバー接続</h1>
+            <p>DNS設定不要、数クリックで接続可能、24時間サポートのMCEasyLinkで、ゲーム機から簡単に外部サーバーをお楽しみください。</p>
+            
+            <div class="hero-buttons">
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="btn" target="_blank">
+                    <i class="fab fa-discord"></i>
+                    Discordに参加
+                </a>
+                <a href="friends.html" class="btn btn-outline">
+                    <i class="fas fa-question-circle"></i>
+                    参加方法
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- その他のセクション -->
+    <section class="section" id="benefits">
+        <div class="container">
+            <h2 class="section-title">MCEasyLinkの3つのメリット</h2>
+            <div class="benefits">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>DNS設定不要</h3>
+                    <p>MCEasyLinkはDNSを設定する手間をなくし、データもそのまま移行されます。</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3>接続簡単</h3>
+                    <p>簡単な数クリックでサーバーへすぐに接続可能。追加料金は一切ありません。</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>サポートあり</h3>
+                    <p>サーバー運営のサポートスタッフとDiscordで24時間サポートが可能になります。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="faq">
+        <div class="container">
+            <h2 class="section-title">よくある質問</h2>
+            <div class="faq">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>DNSの設定を行っていた場合は？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>元々DNS設定を使用していた方は設定を変更する必要があります。</p>
+                        <p>※Switchでの場合の設定変更方法</p>
+                        <ol>
+                            <li>Switchのホーム画面から「設定」を選択する</li>
+                            <li>「インターネット設定」を選択する</li>
+                            <li>「有線接続」または「登録済みの無線」を選択する</li>
+                            <li>「設定の変更」を選択する</li>
+                            <li>「DNS設定」を選択する</li>
+                            <li>「手動」から 「自動」に変更</li>
+                            <li>「保存する」を選択する</li>
+                        </ol>
+                        <p>これで以前の設定は無効化され、特集サーバーに参加できるようになりました。</p>
+                        <p>このまま参加方法へ移動し、設定を続けてください</p>
+                        <p>※設定変更によるサーバー記録がなくなるなどの問題は発生しません。</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>サーバーに参加できません</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>基本的に起こる症状（接続不安定、最新バージョンでない、フレンド追加していない等）ではないことを確認した上、具体的な情報（動画等）をDiscordサポートサーバーへ送信してください。最短5分以内にあなたの問題に対応いたします。</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>SNS等で紹介してもいいですか？</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>SNS等で公開しても全然問題ありません🙆</p>
+                        <p>但し、悪い印象を与えないこと、概要欄などに必ずこのサイトを記載すること。</p>
+                        <p>この2つの条件に当てはまるようにしてください。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 修正後の動画セクション -->
+    <div class="video-container">
+        <h2>解説動画</h2>
+        <div class="video-wrapper">
+            <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/ruGiRS7iJ5w?si=sRu83M0XfO8vENM8" 
+                title="MCEasyLink接続方法" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        <a href="https://www.youtube.com/@code.tec." class="btn" target="_blank">
+            <i class="fas fa-video"></i>
+            もっと動画を見る
+        </a>
+    </div>
+
+    <!-- CSS追加部分（既存のstyleタグ内に追加） -->
+    <style>
+    /* 既存の.video-containerスタイルは保持 */
+    .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9アスペクト比 */
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        margin-bottom: 2rem;
+        border-radius: var(--rounded);
+        background: #000;
+    }
+
+    .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    /* 既存の.video-placeholder関連スタイルは削除 */
+    </style>
+    
+    <section class="cta">
+        <div class="container">
+            <h2>もしあなたがマイクラサーバー管理者だった場合、あなたのサーバーを掲載することができます</h2>
+            <a href="https://discord.com/invite/SQgnDhEbgc" class="btn">
+                <i class="fas fa-rocket"></i>
+                申請する
+            </a>
+        </div>
+    </section>
+    
+    <!-- フッター -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo" style="color: white; font-size: 1.5rem;">
+                <i class="fas fa-server"></i>
+                <span>MCEasyLink</span>
+            </div>
+            
+            <div class="social-icons">
+                <a href="https://www.youtube.com/@code.tec." target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            </div>
+            
+            <!-- SNSシェアセクション -->
+            <div class="share-section">
+                <h3>SNSでシェアする場合のクレジット表記</h3>
+                <div class="share-box">
+                    <div class="tooltip" id="copyTooltip">コピーしました!</div>
+                    <div id="creditText">
+                        このサービスはMCEasyLinkによって作成されました<br>
+https://www.svcn.pgw.jp/
+<br>
+<br>このサービスは完全無料で提供されています。
+                    </div>
+                    <button class="copy-btn" onclick="copyCredit()">
+                        <i class="far fa-copy"></i> コピー
+                    </button>
+                </div>
+            </div>
+            
+            <!-- フッターリンク -->
+            <div class="footer-links">
+                <a href="index.html" class="footer-link">ホーム</a>
+                <a href="terms.html" class="footer-link">利用規約</a>
+                <a href="privacypolicy.html" class="footer-link">プライバシーポリシー</a>
+                <a href="friends.html" class="footer-link">参加方法</a>
+                <a href="gemertag.html" class="footer-link">利用可能なゲーマータグ</a>
+                <a href="kifu.html" class="footer-link">寄付特典</a>
+                <a href="https://discord.com/invite/SQgnDhEbgc" class="footer-link" target="_blank">Discordサーバー</a>
+            </div>
+            
+            <p>&copy; <span id="currentYear"></span> MCEasyLink. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 現在の年を自動更新
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // FAQの開閉
+        function toggleAnswer(question) {
+            const answer = question.nextElementSibling;
+            const icon = question.querySelector('i');
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                answer.classList.add('show');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+        
+        // クレジットテキストをコピー
+        function copyCredit() {
+            const creditText = document.getElementById('creditText').textContent;
+            const textToCopy = creditText.replace(/<br\s*\/?>/gi, "\n"); // <br>を改行に変換
+            
+            navigator.clipboard.writeText(textToCopy.trim()).then(() => {
+                const tooltip = document.getElementById('copyTooltip');
+                tooltip.classList.add('show');
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 2000);
+            });
+        }
+        
+        // モバイルメニューの開閉
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // イベントの伝播を防ぐ
+            mobileNav.classList.toggle('open');
+            const icon = this.querySelector('i');
+            if (mobileNav.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // メニュー外をクリックで閉じる
+        document.addEventListener('click', function(event) {
+            if (!mobileNav.contains(event.target) && event.target !== mobileMenuBtn) {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // モバイルメニューのリンクをクリックしたらメニューを閉じる
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileNav.classList.remove('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+</html>
